@@ -30,8 +30,17 @@ void spaceship::fly(int key){
     {
         srcRect = srcRect3;
     }
-    // actually moving the spaceship (changing moverRect)
-    moverRect.x += key;
+    // boundaries for the game  
+    if (moverRect.x == 0 and key < 0)
+    {
+    }
+    else if (moverRect.x == 950 and key > 0)
+    {
+    }
+    else
+        // actually moving the spaceship (changing moverRect)
+        moverRect.x += key;
+
 
 }
 
@@ -61,4 +70,20 @@ int spaceship::getLocox()
 int spaceship::getLocoy()
 {
     return moverRect.y;
+}
+
+int spaceship::direction_spaceship() // direction signifies if it goes left (-1), straight up (0), right(1)
+{
+    if (SDL_RectEquals(&srcRect, &srcRect1))
+    {
+        return 0;
+    }
+    if (SDL_RectEquals(&srcRect, &srcRect2))
+    {
+        return -1;
+    }
+    if (SDL_RectEquals(&srcRect, &srcRect3))
+    {
+        return 1;
+    }
 }

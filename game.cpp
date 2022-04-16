@@ -127,7 +127,8 @@ void Game::run( )
 	Frame Frame;
 
 	// A temporary solution to multiple spaceships
-	bool spaceship_created = 0;
+	unsigned int last_time = SDL_GetTicks() ,current_time;
+	
 	while( !quit )
 	{
 		/*
@@ -155,11 +156,7 @@ void Game::run( )
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse,&yMouse);
-				if (spaceship_created == 0)
-				{	
-					Frame.createObject(xMouse, yMouse); // Problem here the multiple ships keep geting created
-					spaceship_created = 1;
-				}
+				Frame.createObject(xMouse, yMouse);
 			}
 			// here is keyboard input
 			
@@ -175,7 +172,12 @@ void Game::run( )
 			{
 				if (e.key.keysym.sym == SDLK_UP)
 				{
-					Frame.shootytime();
+					current_time = SDL_GetTicks();
+  					if (current_time > last_time + 1000)
+						{
+							Frame.shootytime();
+							last_time = current_time;
+						}
 				}
 			}
 			
@@ -183,11 +185,11 @@ void Game::run( )
 
 		SDL_RenderClear(Drawing::gRenderer); //removes everything from renderer
 		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL);//Draws background to renderer
-		//***********************draw the objects here********************
+		//********draw the objects here*******
 
 		Frame.drawObjects(0);
 
-		//****************************************************************
+		//**********************
     	SDL_RenderPresent(Drawing::gRenderer); //displays the updated renderer
 
 	    SDL_Delay(100);	//causes sdl engine to delay for specified miliseconds

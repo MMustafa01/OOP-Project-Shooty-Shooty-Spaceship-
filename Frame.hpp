@@ -10,8 +10,9 @@ class Frame{
     //Right now we're creating one pigeon, 
     // In the solution you have to create vectors of pigeons, eggs, and nests    
 
-    vector<spaceship*> spaceships;
+    spaceship the_actual_spaceship = spaceship();
     vector<Bullet*> bullets;
+    bool has_the_spaceship_spawned = 0;
 
     public:
     void drawObjects(int); 
