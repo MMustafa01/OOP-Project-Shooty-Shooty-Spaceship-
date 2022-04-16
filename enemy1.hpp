@@ -1,6 +1,6 @@
 #include <SDL.h>
 #include "drawing.hpp"
-class spaceship
+class Enemy
 {
 
     SDL_Rect srcRect, moverRect;
@@ -10,13 +10,11 @@ class spaceship
 public:
     // add the fly function here as well.
     void draw();
-    void fly(int);
-    spaceship();
-    // may add other overloaded constructors here...
-    spaceship(int, int);
-    void shoot();
+    void fly();
+    Enemy();
 
+    // may add other overloaded constructors here...
+    // Enemy(int, int, int); no need for this
     int getLocation_x();
     int getLocation_y();
-    int direction_spaceship();
 };
