@@ -15,4 +15,5 @@ public:
     void shoot();
     int getLocox();
     int getLocoy();
+    int direction_spaceship();
 };

@@ -62,3 +62,19 @@ int spaceship::getLocoy()
 {
     return moverRect.y;
 }
+
+int spaceship::direction_spaceship()
+{
+    if (SDL_RectEquals(&srcRect, &srcRect1))
+    {
+        return 0;
+    }
+    if (SDL_RectEquals(&srcRect, &srcRect2))
+    {
+        return -1;
+    }
+    if (SDL_RectEquals(&srcRect, &srcRect3))
+    {
+        return 1;
+    }
+}

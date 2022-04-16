@@ -35,7 +35,8 @@ void Frame::createObject(int x, int y)
 
 void Frame::shootytime()
 {
-    bullets.push_back(new Bullet(the_actual_spaceship.getLocox(),the_actual_spaceship.getLocoy()));
+    if(has_the_spaceship_spawned)
+        bullets.push_back(new Bullet(the_actual_spaceship.getLocox(),the_actual_spaceship.getLocoy(),the_actual_spaceship.direction_spaceship()));
 }
 
 Frame::~Frame()
