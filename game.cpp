@@ -126,26 +126,22 @@ void Game::run( )
 
 	Frame Frame;
 
+	// A temporary solution to multiple spaceships
+	bool spaceship_created = 0;
 	while( !quit )
 	{
 		/*
 		Uint8* keystate = SDL_GetKeyboardState(NULL);
 
 		//continuous-response keys
-		if(keystate[SDLK_LEFT])
-		{
-			
-		}
-		if(keystate[SDLK_RIGHT])
-		{
-		}
-		if(keystate[SDLK_UP])
-		{
-		}
-		if(keystate[SDLK_DOWN])
-		{
-		}
-		*/
+		if(keystate[SDLK_LEFT]){}
+		if(keystate[SDLK_RIGHT]){}
+		if(keystate[SDLK_UP]){}
+		if(keystate[SDLK_DOWN]){}*/
+		
+		
+		
+
 		//Handle events on queue
 		while( SDL_PollEvent( &e ) != 0 )
 		{
@@ -155,21 +151,25 @@ void Game::run( )
 				quit = true;
 			}
 
-			if(e.type == SDL_MOUSEBUTTONDOWN){
-			//this is a good location to add pigeon in linked list.
+			if(e.type == SDL_MOUSEBUTTONDOWN)
+			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse,&yMouse);
-				Frame.createObject(xMouse, yMouse);
+				if (spaceship_created == 0)
+				{	
+					Frame.createObject(xMouse, yMouse); // Problem here the multiple ships keep geting created
+					spaceship_created = 1;
+				}
 			}
 			// here is keyboard input
 			
 			if (e.key.keysym.sym == SDLK_RIGHT)
 			{
-				Frame.drawObjects(4);
+				Frame.drawObjects(4); //For movement towardsright
 			}
 			if (e.key.keysym.sym == SDLK_LEFT)
 			{
-				Frame.drawObjects(-4);
+				Frame.drawObjects(-4); //For movement towards left
 			}
 			if(e.type == SDL_KEYDOWN)
 			{

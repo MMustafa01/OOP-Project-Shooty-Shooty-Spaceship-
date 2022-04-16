@@ -1,5 +1,5 @@
 #include<SDL.h>
-#include "shooter.hpp"
+#include "spaceship.hpp"
 #include "bullet.hpp"
 #include<vector>
 #include<list>
@@ -10,7 +10,7 @@ class Frame{
     //Right now we're creating one pigeon, 
     // In the solution you have to create vectors of pigeons, eggs, and nests    
 
-    vector<Shooter*> shooters;
+    vector<spaceship*> spaceships;
     vector<Bullet*> bullets;
 
     public:
