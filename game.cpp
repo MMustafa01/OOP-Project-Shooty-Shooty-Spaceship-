@@ -2,58 +2,57 @@
 #include "Frame.hpp"
 #include "drawing.hpp"
 
-SDL_Renderer* Drawing::gRenderer = NULL;
-SDL_Texture* Drawing::assets = NULL;
+SDL_Renderer *Drawing::gRenderer = NULL;
+SDL_Texture *Drawing::assets = NULL;
+SDL_Texture *Drawing::assets_enemy1 = NULL;
 
 bool Game::init()
 {
-	//Initialization flag
+	// Initialization flag
 	bool success = true;
 
-
-	//Initialize SDL
-	if( SDL_Init( SDL_INIT_VIDEO ) < 0 )
+	// Initialize SDL
+	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf( "SDL could not initialize! SDL Error: %s\n", SDL_GetError() );
+		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		success = false;
 	}
 	else
 	{
-		//Set texture filtering to linear
-		if( !SDL_SetHint( SDL_HINT_RENDER_SCALE_QUALITY, "1" ) )
+		// Set texture filtering to linear
+		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 		{
-			printf( "Warning: Linear texture filtering not enabled!" );
+			printf("Warning: Linear texture filtering not enabled!");
 		}
 
-		//Create window
-		gWindow = SDL_CreateWindow( "HU Mania", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN );
-		if( gWindow == NULL )
+		// Create window
+		gWindow = SDL_CreateWindow("HU Mania", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+		if (gWindow == NULL)
 		{
-			printf( "Window could not be created! SDL Error: %s\n", SDL_GetError() );
+			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
 			success = false;
 		}
 		else
 		{
-			//Create renderer for window
-			Drawing::gRenderer = SDL_CreateRenderer( gWindow, -1, SDL_RENDERER_ACCELERATED );
-			if( Drawing::gRenderer == NULL )
+			// Create renderer for window
+			Drawing::gRenderer = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
+			if (Drawing::gRenderer == NULL)
 			{
-				printf( "Renderer could not be created! SDL Error: %s\n", SDL_GetError() );
+				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
 				success = false;
 			}
 			else
 			{
-				//Initialize renderer color
-				SDL_SetRenderDrawColor( Drawing::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF );
+				// Initialize renderer color
+				SDL_SetRenderDrawColor(Drawing::gRenderer, 0xFF, 0xFF, 0xFF, 0xFF);
 
-				//Initialize PNG loading
+				// Initialize PNG loading
 				int imgFlags = IMG_INIT_PNG;
-				if( !( IMG_Init( imgFlags ) & imgFlags ) )
+				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
-					printf( "SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError() );
+					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
 					success = false;
 				}
-
 			}
 		}
 	}
@@ -63,63 +62,66 @@ bool Game::init()
 
 bool Game::loadMedia()
 {
-	//Loading success flag
+	// Loading success flag
 	bool success = true;
-	
+
 	Drawing::assets = loadTexture("assets_project.png");
-    gTexture = loadTexture("spacebg.png"); // The background is loaded here
-	if(Drawing::assets==NULL || gTexture==NULL)
-    {
-        printf("Unable to run due to error: %s\n",SDL_GetError());
-        success =false;
-    }
+	Drawing::assets_enemy1 = loadTexture("ship.png");
+	gTexture = loadTexture("spacebg.png"); // The background is loaded here
+	if (Drawing::assets == NULL || gTexture == NULL)
+	{
+		printf("Unable to run due to error: %s\n", SDL_GetError());
+		success = false;
+	}
 	return success;
 }
 
 void Game::close()
 {
-	//Free loaded images
+	// Free loaded images
 	SDL_DestroyTexture(Drawing::assets);
-	Drawing::assets=NULL;
+	Drawing::assets = NULL;
+	SDL_DestroyTexture(Drawing::assets_enemy1);
+	Drawing::assets_enemy1 = NULL;
 	SDL_DestroyTexture(gTexture);
-	
-	//Destroy window
-	SDL_DestroyRenderer( Drawing::gRenderer );
-	SDL_DestroyWindow( gWindow );
+
+	// Destroy window
+	SDL_DestroyRenderer(Drawing::gRenderer);
+	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 	Drawing::gRenderer = NULL;
-	//Quit SDL subsystems
+	// Quit SDL subsystems
 	IMG_Quit();
 	SDL_Quit();
 }
 
-SDL_Texture* Game::loadTexture( std::string path )
+SDL_Texture *Game::loadTexture(std::string path)
 {
-	//The final texture
-	SDL_Texture* newTexture = NULL;
+	// The final texture
+	SDL_Texture *newTexture = NULL;
 
-	//Load image at specified path
-	SDL_Surface* loadedSurface = IMG_Load( path.c_str() );
-	if( loadedSurface == NULL )
+	// Load image at specified path
+	SDL_Surface *loadedSurface = IMG_Load(path.c_str());
+	if (loadedSurface == NULL)
 	{
-		printf( "Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError() );
+		printf("Unable to load image %s! SDL_image Error: %s\n", path.c_str(), IMG_GetError());
 	}
 	else
 	{
-		//Create texture from surface pixels
-        newTexture = SDL_CreateTextureFromSurface( Drawing::gRenderer, loadedSurface );
-		if( newTexture == NULL )
+		// Create texture from surface pixels
+		newTexture = SDL_CreateTextureFromSurface(Drawing::gRenderer, loadedSurface);
+		if (newTexture == NULL)
 		{
-			printf( "Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError() );
+			printf("Unable to create texture from %s! SDL Error: %s\n", path.c_str(), SDL_GetError());
 		}
 
-		//Get rid of old loaded surface
-		SDL_FreeSurface( loadedSurface );
+		// Get rid of old loaded surface
+		SDL_FreeSurface(loadedSurface);
 	}
 
 	return newTexture;
 }
-void Game::run( )
+void Game::run()
 {
 	bool quit = false;
 	SDL_Event e;
@@ -127,9 +129,14 @@ void Game::run( )
 	Frame Frame;
 
 	// A temporary solution to multiple spaceships
-	bool spaceship_created = 0;
-	while( !quit )
+	unsigned int last_time = SDL_GetTicks(), current_time;
+
+	unsigned int last_time_for_enemy1 = SDL_GetTicks(), current_time_for_enemy1; // same thing we did for bullets but this time we do for enemies
+
+	while (!quit)
 	{
+		// sample coed, does not work as expected
+
 		/*
 		Uint8* keystate = SDL_GetKeyboardState(NULL);
 
@@ -138,59 +145,62 @@ void Game::run( )
 		if(keystate[SDLK_RIGHT]){}
 		if(keystate[SDLK_UP]){}
 		if(keystate[SDLK_DOWN]){}*/
-		
-		
-		
 
-		//Handle events on queue
-		while( SDL_PollEvent( &e ) != 0 )
+		// Handle events on queue
+		while (SDL_PollEvent(&e) != 0)
 		{
-			//User requests quit
-			if( e.type == SDL_QUIT )
+			current_time_for_enemy1 = SDL_GetTicks();
+			if (current_time_for_enemy1 > last_time_for_enemy1 + 8000)
+			{
+				Frame.createObject();
+				last_time_for_enemy1 = current_time_for_enemy1;
+			}
+
+			// User requests quit
+			if (e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
 
-			if(e.type == SDL_MOUSEBUTTONDOWN)
+			if (e.type == SDL_MOUSEBUTTONDOWN)
 			{
 				int xMouse, yMouse;
-				SDL_GetMouseState(&xMouse,&yMouse);
-				if (spaceship_created == 0)
-				{	
-					Frame.createObject(xMouse, yMouse); // Problem here the multiple ships keep geting created
-					spaceship_created = 1;
-				}
+				SDL_GetMouseState(&xMouse, &yMouse);
+				Frame.createObject(xMouse, yMouse);
 			}
 			// here is keyboard input
-			
+
 			if (e.key.keysym.sym == SDLK_RIGHT)
 			{
-				Frame.drawObjects(4); //For movement towardsright
+				Frame.drawObjects(4); // For movement towardsright
 			}
 			if (e.key.keysym.sym == SDLK_LEFT)
 			{
-				Frame.drawObjects(-4); //For movement towards left
+				Frame.drawObjects(-4); // For movement towards left
 			}
-			if(e.type == SDL_KEYDOWN)
+			if (e.type == SDL_KEYDOWN)
 			{
 				if (e.key.keysym.sym == SDLK_UP)
 				{
-					Frame.shootytime();
+					current_time = SDL_GetTicks();
+					if (current_time > last_time + 1000)
+					{
+						Frame.shootytime();
+						last_time = current_time;
+					}
 				}
 			}
-			
 		}
 
-		SDL_RenderClear(Drawing::gRenderer); //removes everything from renderer
-		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL);//Draws background to renderer
-		//***********************draw the objects here********************
+		SDL_RenderClear(Drawing::gRenderer);					  // removes everything from renderer
+		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL); // Draws background to renderer
+		//********draw the objects here*******
 
 		Frame.drawObjects(0);
 
-		//****************************************************************
-    	SDL_RenderPresent(Drawing::gRenderer); //displays the updated renderer
+		//**********************
+		SDL_RenderPresent(Drawing::gRenderer); // displays the updated renderer
 
-	    SDL_Delay(100);	//causes sdl engine to delay for specified miliseconds
+		SDL_Delay(100); // causes sdl engine to delay for specified miliseconds
 	}
-			
 }
