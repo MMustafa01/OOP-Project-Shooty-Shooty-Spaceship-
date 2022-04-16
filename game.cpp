@@ -65,8 +65,11 @@ bool Game::loadMedia()
 	// Loading success flag
 	bool success = true;
 
+	// loading alll png
+	// first laod in drawing.hpp then here
 	Drawing::assets = loadTexture("assets_project.png");
 	Drawing::assets_enemy1 = loadTexture("ship.png");
+
 	gTexture = loadTexture("spacebg.png"); // The background is loaded here
 	if (Drawing::assets == NULL || gTexture == NULL)
 	{
@@ -81,8 +84,10 @@ void Game::close()
 	// Free loaded images
 	SDL_DestroyTexture(Drawing::assets);
 	Drawing::assets = NULL;
+
 	SDL_DestroyTexture(Drawing::assets_enemy1);
 	Drawing::assets_enemy1 = NULL;
+
 	SDL_DestroyTexture(gTexture);
 
 	// Destroy window
@@ -149,8 +154,10 @@ void Game::run()
 		// Handle events on queue
 		while (SDL_PollEvent(&e) != 0)
 		{
+
+			// for the enemy1 class to stop it from being a continuous line
 			current_time_for_enemy1 = SDL_GetTicks();
-			if (current_time_for_enemy1 > last_time_for_enemy1 + 8000)
+			if (current_time_for_enemy1 > last_time_for_enemy1 + 8000) // change this to a varible
 			{
 				Frame.createObject();
 				last_time_for_enemy1 = current_time_for_enemy1;

@@ -27,7 +27,7 @@ void Frame::drawObjects(int key)
         if (enemy1[i]->getLocation() > 600)
         {
             delete enemy1[i];
-            // bullets.erase(bullets.begin() + i);
+            // need to write collide logic here
         }
     }
 }
@@ -43,7 +43,7 @@ void Frame::createObject(int x, int y)
 
 void Frame::createObject()
 {
-    enemy1.push_back(new Enemy(400, 0));
+    enemy1.push_back(new Enemy());
 }
 
 void Frame::shootytime()

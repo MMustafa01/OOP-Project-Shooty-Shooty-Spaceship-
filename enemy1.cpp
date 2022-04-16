@@ -20,17 +20,20 @@ void Enemy::fly()
     }
 }
 
-Enemy::Enemy()
+Enemy::Enemy() : srcRect(srcRect_enemy1)
 {
     // src coorinates from assets.png file, they have been found using spritecow.com
-    srcRect = srcRect_enemy1;
+    // srcRect = srcRect_enemy1;
+
+    int rand_position = rand() % 949; // in the range 0 to 950
 
     // it will display Bullet on x =400 , y =0 location, the size of enemy ship is 50 width, 60 height
-    moverRect = {400, 0, 50, 50};
+    // y = -5 so it gives the an effect
+    moverRect = {rand_position, -5, 50, 50};
 }
 
-Enemy::Enemy(int x, int y) : srcRect(srcRect_enemy1), moverRect({x + 15, y, 50, 50}){}; // constructor of Bullet with coordinates of location clicked
-
+// Enemy::Enemy(int x, int y) : srcRect(srcRect_enemy1), moverRect({x + 15, y, 50, 50}){}; // constructor of Bullet with coordinates of location clicked
+//
 int Enemy::getLocation()
 {
     return moverRect.y;
