@@ -127,7 +127,6 @@ void Game::run( )
 	Frame Frame;
 
 	// A temporary solution to multiple spaceships
-	bool spaceship_created = 0;
 	while( !quit )
 	{
 		/*
@@ -155,11 +154,7 @@ void Game::run( )
 			{
 				int xMouse, yMouse;
 				SDL_GetMouseState(&xMouse,&yMouse);
-				if (spaceship_created == 0)
-				{	
-					Frame.createObject(xMouse, yMouse); // Problem here the multiple ships keep geting created
-					spaceship_created = 1;
-				}
+				Frame.createObject(xMouse, yMouse); // Problem here the multiple ships keep geting created
 			}
 			// here is keyboard input
 			
