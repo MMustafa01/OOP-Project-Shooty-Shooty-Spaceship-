@@ -128,6 +128,8 @@ void Game::run( )
 
 	// A temporary solution to multiple spaceships
 	bool spaceship_created = 0;
+	unsigned int last_time = SDL_GetTicks() ,current_time;
+	
 	while( !quit )
 	{
 		/*
@@ -175,7 +177,12 @@ void Game::run( )
 			{
 				if (e.key.keysym.sym == SDLK_UP)
 				{
-					Frame.shootytime();
+					current_time = SDL_GetTicks();
+  					if (current_time > last_time + 1000)
+						{
+							Frame.shootytime();
+							last_time = current_time;
+						}
 				}
 			}
 			
