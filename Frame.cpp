@@ -11,30 +11,63 @@ void Frame::drawObjects(int key)
     }
     for (int i = 0; i < bullets.size(); i++) // iterates through the list/vector of pigeons
     {
+        // use iterators
         bullets[i]->draw();
         bullets[i]->fly();
-        if (bullets[i]->getLocation() < 0)
+        if (bullets[i]->getLocation_y() < 0)
         {
             delete bullets[i];
             bullets.erase(bullets.begin() + i);
+            // continue;
         }
+        // for (int j = 0; j < enemy1.size(); j++) //use iterator
+        // {
+        //     if ((bullets[i]->getLocation_y() <= enemy1[i]->getLocation_y() + 60) & (bullets[i]->getLocation_x() <= enemy1[i]->getLocation_x() + 50) & (bullets[i]->getLocation_x() >= enemy1[i]->getLocation_x() /*- bullet width*/))
+        //     {
+        //         cout << "Enemy has been killed \n";
+        //         // delete bullets[i];
+        //         // bullets.erase(bullets.begin() + i);
+        //         // delete enemy1[j];
+        //         // enemy1.erase(enemy1.begin() + j);
+        //         /*Very basic enemy killing logic, will be updated*/
+        //     }
+        // }
     }
 
-    for (int i = 0; i < enemy1.size(); i++) // iterates through the list/vector of pigeons
+    for (int i = 0; i < enemy1.size(); i++) // iterates through the list/vector of Enemies
     {
         enemy1[i]->draw();
         enemy1[i]->fly();
-        if (enemy1[i]->getLocation() > 600)
+        if (enemy1[i]->getLocation_y() > 600)
         {
             delete enemy1[i];
-            // need to write collide logic here
+            enemy1.erase(enemy1.begin() + i);
+
+            cout << "enenmy has been deleted" << endl;
+            //  need to write collide logic here
+        }
+        int e1_loc_x = enemy1[i]->getLocation_x();
+        int e1_loc_y = enemy1[i]->getLocation_y();
+        int s1_loc_x = the_actual_spaceship.getLocation_x();
+        int s1_loc_y = the_actual_spaceship.getLocation_y();
+        if ((e1_loc_x >= s1_loc_x - 50 & e1_loc_y >= s1_loc_y - 60) & (e1_loc_x <= s1_loc_x + 50 & e1_loc_y >= s1_loc_y - 60))
+        {
+            delete enemy1[i];
+            enemy1.erase(enemy1.begin() + i);
+            cout << "There has been a collision \n";
+            the_actual_spaceship.reduce_health();
+            cout << "Health reduced one unit \n";
+            if (the_actual_spaceship.is_dead()) // not working properly check again
+            {
+                cout << "Omaiwa mau shindairu \n";
+            }
         }
     }
 }
 /*Frame.createObject creates spaceship*/
 void Frame::createObject(int x, int y)
 {
-    if (1) // supposed to be if clicked on the start button then summon the spaceship
+    // if (1) // supposed to be if clicked on the start button then summon the spaceship
     {
         has_the_spaceship_spawned = 1; // Multiple spaceship problem traced till here. There is no need for a spaceship vector
         std::cout << "Mouse clicked at: " << x << " -- " << y << std::endl;
@@ -49,7 +82,7 @@ void Frame::createObject()
 void Frame::shootytime()
 {
     if (has_the_spaceship_spawned)
-        bullets.push_back(new Bullet(the_actual_spaceship.getLocox(), the_actual_spaceship.getLocoy(), the_actual_spaceship.direction_spaceship()));
+        bullets.push_back(new Bullet(the_actual_spaceship.getLocation_x(), the_actual_spaceship.getLocation_y(), the_actual_spaceship.direction_spaceship()));
 }
 
 Frame::~Frame()

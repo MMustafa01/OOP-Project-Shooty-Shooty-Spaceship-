@@ -14,10 +14,6 @@ void Enemy::fly()
 {
     // actually moving the enemy ship (changing moverRect
     moverRect.y += 5;
-    if (moverRect.y > 600)
-    {
-        moverRect.y = 0;
-    }
 }
 
 Enemy::Enemy() : srcRect(srcRect_enemy1)
@@ -34,7 +30,12 @@ Enemy::Enemy() : srcRect(srcRect_enemy1)
 
 // Enemy::Enemy(int x, int y) : srcRect(srcRect_enemy1), moverRect({x + 15, y, 50, 50}){}; // constructor of Bullet with coordinates of location clicked
 //
-int Enemy::getLocation()
+int Enemy::getLocation_y()
 {
     return moverRect.y;
+}
+
+int Enemy::getLocation_x()
+{
+    return moverRect.x;
 }

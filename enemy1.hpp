@@ -12,8 +12,10 @@ public:
     void draw();
     void fly();
     Enemy();
-    Enemy(int, int);
+
     // may add other overloaded constructors here...
     // Enemy(int, int, int); no need for this
-    int getLocation();
+    int getLocation_x();
+    int getLocation_y();
+    // friend void collision(&);//madse this a
 };
