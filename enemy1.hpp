@@ -17,4 +17,5 @@ public:
     // Enemy(int, int, int); no need for this
     int getLocation_x();
     int getLocation_y();
+    // friend void collision(&);//madse this a
 };

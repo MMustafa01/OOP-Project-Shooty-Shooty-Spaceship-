@@ -13,5 +13,6 @@ public:
     Bullet(); 
     // may add other overloaded constructors here... 
     Bullet(int, int, int);
-    int getLocation();
+    int getLocation_x();
+    int getLocation_y();
 };

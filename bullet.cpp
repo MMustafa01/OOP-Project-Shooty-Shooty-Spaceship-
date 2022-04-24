@@ -53,7 +53,12 @@ Bullet::Bullet(){
 Bullet::Bullet(int x, int y, int z) : srcRect(srcRect12),moverRect({x+15, y, 20, 20}),direction(z) {};// constructor of Bullet with coordinates of location clicked
 
 
-int Bullet::getLocation()
+int Bullet::getLocation_y()
 {
     return moverRect.y;
+}
+
+int Bullet::getLocation_x()
+{
+    return moverRect.x;
 }

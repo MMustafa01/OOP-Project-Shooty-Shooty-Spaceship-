@@ -60,6 +60,17 @@ spaceship::spaceship(int x, int y) // constructor of spaceship with coordinates 
     // it will display spaceship on clicked x, y location, the size of spaceship is 50 width, 60 height
     moverRect = {400, 500, 50, 50};
 }
+void spaceship::reduce_health()
+{
+    health -= 1;
+}
+bool spaceship::is_dead()
+{
+    if (health <= 0)
+        return true;
+    else
+        return false;
+}
 
 int spaceship::getLocation_x()
 {
@@ -85,4 +96,9 @@ int spaceship::direction_spaceship() // direction signifies if it goes left (-1)
     {
         return 1;
     }
+}
+
+void spaceship::reset_health()
+{
+    health = 4;
 }
