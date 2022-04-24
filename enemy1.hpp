@@ -1,25 +1,21 @@
 #include <SDL.h>
 #include "drawing.hpp"
-class spaceship
+class Enemy
 {
-public:
+
     SDL_Rect srcRect, moverRect;
     int frame = 0;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
-    int health = 4;
 
 public:
     // add the fly function here as well.
     void draw();
-    void fly(int);
-    spaceship();
+    void fly();
+    Enemy();
+
     // may add other overloaded constructors here...
-    spaceship(int, int);
-    void shoot();
-    void reduce_health();
-    bool is_dead();
+    // Enemy(int, int, int); no need for this
     int getLocation_x();
     int getLocation_y();
-    int direction_spaceship();
-    // void changehealth(int h);
+    // friend void collision(&);//madse this a
 };

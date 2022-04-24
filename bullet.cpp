@@ -6,13 +6,13 @@
 void Bullet::draw(){
     switch (direction)
     {
-    case -1:
+    case -1: // moving left
         SDL_RenderCopyEx(Drawing::gRenderer, Drawing::assets, &srcRect, &moverRect , -30, NULL, flip);
         break;
-    case 0:
+    case 0: // center
         SDL_RenderCopyEx(Drawing::gRenderer, Drawing::assets, &srcRect, &moverRect , 0, NULL, flip);
         break;
-    case 1:
+    case 1: // right
         SDL_RenderCopyEx(Drawing::gRenderer, Drawing::assets, &srcRect, &moverRect , 30, NULL, flip);
         break;
     }
@@ -31,10 +31,10 @@ void Bullet::fly(){
     // actually moving the Bullet (changing moverRect)
     switch (direction)
     {
-    case -1:
+    case -1: // moves left
         moverRect.x -= 5;
         break;
-    case 1:
+    case 1: // moves right
         moverRect.x += 5;
         break;
     }
@@ -50,17 +50,15 @@ Bullet::Bullet(){
     moverRect = {400, 500, 50, 50};
 }
 
-Bullet::Bullet(int x, int y, int z) // constructor of Bullet with coordinates of location clicked
-{
-    // src coorinates from assets.png file, they have been found using spritecow.com
-    srcRect = srcRect12;
+Bullet::Bullet(int x, int y, int z) : srcRect(srcRect12),moverRect({x+15, y, 20, 20}),direction(z) {};// constructor of Bullet with coordinates of location clicked
 
-    // it will display Bullet on clicked x, y location, the size of Bullet is 50 width, 60 height
-    moverRect = {x+15, y, 20, 20};
-    direction = z;
-}
 
-int Bullet::getLocation()
+int Bullet::getLocation_y()
 {
     return moverRect.y;
+}
+
+int Bullet::getLocation_x()
+{
+    return moverRect.x;
 }

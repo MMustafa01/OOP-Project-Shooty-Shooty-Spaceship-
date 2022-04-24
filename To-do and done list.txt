@@ -1,0 +1,16 @@
+DONE:
+1) check frame create object, weird if condition
+
+TO DO:
+1. Gotta work on collison logic
+2. Enemy gets deleted in this version (DONE)
+3. Need add game over screen/game start screen
+4. Health bhi ad karni hai
+5. Gotta add score/coins
+6. Gotta have a movey bg
+
+
+Notes:
+Fixed the speed up problem (check game.cpp)
+Reduced Game delay to 50 ms from 100 ms
+Implemented basic collision logic
