@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Frame.hpp"
+//#include "spaceship.hpp"
 
 void Frame::drawObjects(int key)
 {
@@ -9,7 +10,7 @@ void Frame::drawObjects(int key)
         the_actual_spaceship.draw();
         the_actual_spaceship.fly(key);
     }
-    for (int i = 0; i < bullets.size(); i++) // iterates through the list/vector of pigeons
+    for (int i = 0; i < bullets.size(); i++) // iterates through the list/vector of bullets
     {
         // use iterators
         bullets[i]->draw();
@@ -33,36 +34,107 @@ void Frame::drawObjects(int key)
         //     }
         // }
     }
-
-    for (int i = 0; i < enemy1.size(); i++) // iterates through the list/vector of Enemies
+    for (enemy_ptr = enemy1.begin(); enemy_ptr < enemy1.end(); enemy_ptr++)
     {
-        enemy1[i]->draw();
-        enemy1[i]->fly();
-        if (enemy1[i]->getLocation_y() > 600)
-        {
-            delete enemy1[i];
-            enemy1.erase(enemy1.begin() + i);
-
-            cout << "enenmy has been deleted" << endl;
-            //  need to write collide logic here
-        }
-        int e1_loc_x = enemy1[i]->getLocation_x();
-        int e1_loc_y = enemy1[i]->getLocation_y();
+        (*enemy_ptr)->draw();
+        (*enemy_ptr)->fly();
+        int e1_loc_x = (*enemy_ptr)->getLocation_x();
+        int e1_loc_y = (*enemy_ptr)->getLocation_y();
         int s1_loc_x = the_actual_spaceship.getLocation_x();
         int s1_loc_y = the_actual_spaceship.getLocation_y();
-        if ((e1_loc_x >= s1_loc_x - 50 & e1_loc_y >= s1_loc_y - 60) & (e1_loc_x <= s1_loc_x + 50 & e1_loc_y >= s1_loc_y - 60))
+
+        if ((*enemy_ptr)->getLocation_y() > 600) // condition if enemy leaves screen
         {
-            delete enemy1[i];
-            enemy1.erase(enemy1.begin() + i);
-            cout << "There has been a collision \n";
+            enemy_ptr = enemy1.erase(enemy_ptr); // this deletes the current enemy
+        }
+        else if (true)
+        { // collision with bullet
+            for (bullet_ptr = bullets.begin(); bullet_ptr < bullets.end(); bullet_ptr++)
+            {
+                int b_loc_x = (*bullet_ptr)->getLocation_x();
+                int b_loc_y = (*bullet_ptr)->getLocation_y();
+                if ((e1_loc_x >= b_loc_x - 20 & e1_loc_y >= b_loc_y - 20) & (e1_loc_x <= b_loc_x + 50 & e1_loc_y >= b_loc_y - 20))
+                {
+                    bullet_ptr = bullets.erase(bullet_ptr);
+                    enemy_ptr = enemy1.erase(enemy_ptr);
+                }
+            }
+        }
+        if ((e1_loc_x >= s1_loc_x - 50 & e1_loc_y >= s1_loc_y - 60) & (e1_loc_x <= s1_loc_x + 50 & e1_loc_y >= s1_loc_y - 60))
+        { // collision with spaceship
+            enemy_ptr = enemy1.erase(enemy_ptr);
+            cout << "Collsion \n";
             the_actual_spaceship.reduce_health();
             cout << "Health reduced one unit \n";
-            if (the_actual_spaceship.is_dead()) // not working properly check again
+            if (the_actual_spaceship.is_dead())
             {
                 cout << "Omaiwa mau shindairu \n";
             }
         }
     }
+    // for (auto *enemy_pointer : enemy1)
+    // {
+    //     enemy_pointer->draw();
+    //     enemy_pointer->fly();
+    //     int e1_loc_x = enemy_pointer->getLocation_x();
+    //     int e1_loc_y = enemy_pointer->getLocation_y();
+    //     int s1_loc_x = the_actual_spaceship.getLocation_x();
+    //     int s1_loc_y = the_actual_spaceship.getLocation_y();
+    //     if (enemy_pointer->getLocation_y() > 600) // condition of if the enemy leaves the screen
+    //     {
+    //         delete enemy_pointer;
+
+    //     }
+    //     else if (false) // condition of enemy collides with bullet
+    //     {
+
+    //     }
+    //     else if ((e1_loc_x >= s1_loc_x - 50 & e1_loc_y >= s1_loc_y - 60) & (e1_loc_x <= s1_loc_x + 50 & e1_loc_y >= s1_loc_y - 60))
+    //     { // condition of enemy collides with spaceship
+    //         delete enemy_pointer;
+    //         cout<<"Collsion \n";
+    //         the_actual_spaceship.reduce_health();
+    //         cout << "Health reduced one unit \n";
+    //         if (the_actual_spaceship.is_dead())
+    //         {
+    //             cout << "Omaiwa mau shindairu \n";
+    //         }
+    //         cout <<"temp" ;
+    //     }
+    //     cout<<"temp2";
+    // }
+    // cout <<"temp3";
+    // enemy_pointer.clear();
+    // for (int i = 0; i < enemy1.size(); i++) // iterates through the list/vector of Enemies
+    // {
+    //     enemy1[i]->draw();
+    //     enemy1[i]->fly();
+    //     if (enemy1[i]->getLocation_y() > 600)
+    //     {
+    //         delete enemy1[i];
+    //         enemy1.erase(enemy1.begin() + i);
+
+    //         cout << "enenmy has been deleted" << endl;
+    //         //  need to write collide logic here
+    //     }
+
+    //     int e1_loc_x = enemy1[i]->getLocation_x();
+    //     int e1_loc_y = enemy1[i]->getLocation_y();
+    //     int s1_loc_x = the_actual_spaceship.getLocation_x();
+    //     int s1_loc_y = the_actual_spaceship.getLocation_y();
+    //     if ((e1_loc_x >= s1_loc_x - 50 & e1_loc_y >= s1_loc_y - 60) & (e1_loc_x <= s1_loc_x + 50 & e1_loc_y >= s1_loc_y - 60))
+    //     {
+    //         delete enemy1[i];
+    //         enemy1.erase(enemy1.begin() + i);
+    //         cout << "There has been a collision \n";
+    //         the_actual_spaceship.reduce_health();
+    //         cout << "Health reduced one unit \n";
+    //         if (the_actual_spaceship.is_dead()) // not working properly check again
+    //         {
+    //             cout << "Omaiwa mau shindairu \n";
+    //         }
+    //     }
+    // }
 }
 /*Frame.createObject creates spaceship*/
 void Frame::createObject(int x, int y)
@@ -92,5 +164,15 @@ Frame::~Frame()
     {
         delete bullets[i];
     }
+    for (int i = 0; i < enemy1.size(); i++)
+    {
+        delete enemy1[i];
+    }
     bullets.clear();
+    enemy1.clear();
+}
+
+void Frame::resets_health()
+{
+    the_actual_spaceship.reset_health();
 }

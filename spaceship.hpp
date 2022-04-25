@@ -21,5 +21,5 @@ public:
     int getLocation_x();
     int getLocation_y();
     int direction_spaceship();
-    // void changehealth(int h);
+    void reset_health();
 };

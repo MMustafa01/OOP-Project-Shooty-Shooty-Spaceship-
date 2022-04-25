@@ -67,9 +67,9 @@ void spaceship::reduce_health()
 bool spaceship::is_dead()
 {
     if (health <= 0)
-        return true;
+        return 1;
     else
-        return false;
+        return 0;
 }
 
 int spaceship::getLocation_x()
@@ -98,8 +98,7 @@ int spaceship::direction_spaceship() // direction signifies if it goes left (-1)
     }
 }
 
-// void spaceship::changehealth(int h)
-//{
-//
-//     health = h;
-// }
+void spaceship::reset_health()
+{
+    health = 4;
+}

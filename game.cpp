@@ -9,7 +9,7 @@ SDL_Renderer *Drawing::gRenderer = NULL;
 SDL_Texture *Drawing::assets = NULL;
 SDL_Texture *Drawing::assets_enemy1 = NULL;
 // SDL_Texture *Drawing::game_over_screen = NULL;
-int screen = 1;
+int screen = 0; // initial screen
 
 bool Game::init()
 {
@@ -75,7 +75,7 @@ bool Game::loadMedia()
 	Drawing::assets = loadTexture("assets_project.png");
 	Drawing::assets_enemy1 = loadTexture("ship.png");
 
-	gTexture = loadTexture("lava_screen.png"); // The background is loaded here
+	gTexture = loadTexture("lava bg.png"); // The background is loaded here
 	// gTexture = loadTexture("initial screen.png");
 	if (Drawing::assets == NULL || gTexture == NULL)
 	{
@@ -161,7 +161,7 @@ void Game::run()
 		while (SDL_PollEvent(&e) != 0)
 		{
 
-			if (screen == 1)
+			if (screen == 0)
 			{
 				if (e.type == SDL_QUIT)
 				{
@@ -173,17 +173,18 @@ void Game::run()
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse, &yMouse);
 					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
-					if (370 <= xMouse <= 627 and 371 <= yMouse <= 422)
+					if (370 <= xMouse and xMouse <= 627 and 371 <= yMouse and yMouse <= 422)
 					{
-						screen = 2;
-						gTexture = loadTexture("lava_screen.png");
+
+						gTexture = loadTexture("choose screen.png");
+						screen = 1;
 					}
 				}
 			}
 
 			if (Frame.the_actual_spaceship.is_dead())
 			{
-				screen = 0;
+				screen = 6;
 				gTexture = loadTexture("game over screen.png");
 				if (e.type == SDL_QUIT)
 				{
@@ -194,16 +195,21 @@ void Game::run()
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse, &yMouse);
 					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
-					if (298 <= xMouse <= 702 and 428 <= yMouse <= 473)
+					if (298 <= xMouse and xMouse <= 702 and 428 <= yMouse and yMouse <= 473)
 					{
 						cout << "working" << endl;
 
 						// the_actual_spaceship.changehealth(4);
+						// health = 4;
+						// Frame.resets_health();
+
+						// Frame.resets_health(the_actual_spaceship &);
+						Frame.resets_health();
 
 						// this part isnt working cuz idhar aa kar screen stops cuz the spaceship is dead wali condition is still tru
 						// so what w need to do is reset th health to 4 BUT i legit cant figure that part out
 
-						screen = 1;
+						screen = 0;
 					}
 				}
 			}
@@ -213,7 +219,7 @@ void Game::run()
 			// cout << count << "\n";
 
 			// for the enemy1 class to stop it from being a continuous line
-			if (screen == 2)
+			if (screen == 1)
 			{
 
 				current_time_for_enemy1 = SDL_GetTicks();
@@ -266,7 +272,7 @@ void Game::run()
 		SDL_RenderClear(Drawing::gRenderer);					  // removes everything from renderer
 		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL); // Draws background to renderer
 																  //********draw the objects here*******
-		if (screen == 2)
+		if (screen == 1)
 		{
 			Frame.drawObjects(movement); // movement variable denotes the movement of the spaceship. It becomes zero in every loop, and becomes 8 or -8 if the arrow keys are pressed
 		}

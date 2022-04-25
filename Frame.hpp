@@ -14,7 +14,9 @@ class Frame
 public:
     spaceship the_actual_spaceship = spaceship();
     vector<Bullet *> bullets;
+    vector<Bullet *>::iterator bullet_ptr;
     vector<Enemy *> enemy1;
+    vector<Enemy *>::iterator enemy_ptr;
     bool has_the_spaceship_spawned = 0;
 
 public:
@@ -24,6 +26,8 @@ public:
     void shootytime();
 
     void collison();
+
+    void resets_health();
 
     ~Frame();
 };
