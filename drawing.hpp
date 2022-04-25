@@ -11,4 +11,5 @@ public:
     // global reference to png image sheets
     static SDL_Texture *assets;        // spaceship
     static SDL_Texture *assets_enemy1; // enenmy
+    static SDL_Texture *assets_enemy2; // enemy 2 basic
 };

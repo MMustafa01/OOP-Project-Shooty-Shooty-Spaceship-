@@ -8,8 +8,11 @@ SDL_Renderer *Drawing::gRenderer = NULL;
 // SDL_Renderer *Drawing::gRenderer_gos = NULL; // gameoverscreen
 SDL_Texture *Drawing::assets = NULL;
 SDL_Texture *Drawing::assets_enemy1 = NULL;
+SDL_Texture *Drawing::assets_enemy2 = NULL;
 // SDL_Texture *Drawing::game_over_screen = NULL;
 int screen = 0; // initial screen
+int map = 0;
+int fighter = 0;
 
 bool Game::init()
 {
@@ -74,6 +77,7 @@ bool Game::loadMedia()
 	// first laod in drawing.hpp then here
 	Drawing::assets = loadTexture("assets_project.png");
 	Drawing::assets_enemy1 = loadTexture("ship.png");
+	Drawing::assets_enemy2 = loadTexture("BasicEnemy.png");
 
 	gTexture = loadTexture("lava bg.png"); // The background is loaded here
 	// gTexture = loadTexture("initial screen.png");
@@ -94,6 +98,9 @@ void Game::close()
 	SDL_DestroyTexture(Drawing::assets_enemy1);
 	Drawing::assets_enemy1 = NULL;
 
+	SDL_DestroyTexture(Drawing::assets_enemy2);
+	Drawing::assets_enemy2 = NULL;
+
 	SDL_DestroyTexture(gTexture);
 
 	// Destroy window
@@ -108,7 +115,7 @@ void Game::close()
 
 SDL_Texture *Game::loadTexture(std::string path)
 {
-	// The final texture
+	// The final texture0
 	SDL_Texture *newTexture = NULL;
 
 	// Load image at specified path
@@ -182,6 +189,41 @@ void Game::run()
 				}
 			}
 
+			if (screen == 1)
+			{
+				if (e.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+
+				if (e.type == SDL_MOUSEBUTTONDOWN)
+				{
+					int xMouse, yMouse;
+					SDL_GetMouseState(&xMouse, &yMouse);
+					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
+					if (88 <= xMouse and xMouse <= 333 and 130 <= yMouse and yMouse <= 279) // for lava map
+					{
+						map = 1;
+						gTexture = loadTexture("game over screen.png");
+						screen = 10;
+					}
+
+					if (374 <= xMouse and xMouse <= 625 and 126 <= yMouse and yMouse <= 276) // for space map
+					{
+						map = 2;
+						gTexture = loadTexture("game over screen.png");
+						screen = 10;
+					}
+
+					if (670 <= xMouse and xMouse <= 926 and 126 <= yMouse and yMouse <= 276) // for ice map
+					{
+						map = 3;
+						gTexture = loadTexture("game over screen.png");
+						screen = 10;
+					}
+				}
+			}
+
 			if (Frame.the_actual_spaceship.is_dead())
 			{
 				screen = 6;
@@ -219,7 +261,7 @@ void Game::run()
 			// cout << count << "\n";
 
 			// for the enemy1 class to stop it from being a continuous line
-			if (screen == 1)
+			if (screen == 10)
 			{
 
 				current_time_for_enemy1 = SDL_GetTicks();
@@ -272,7 +314,7 @@ void Game::run()
 		SDL_RenderClear(Drawing::gRenderer);					  // removes everything from renderer
 		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL); // Draws background to renderer
 																  //********draw the objects here*******
-		if (screen == 1)
+		if (screen == 10)
 		{
 			Frame.drawObjects(movement); // movement variable denotes the movement of the spaceship. It becomes zero in every loop, and becomes 8 or -8 if the arrow keys are pressed
 		}

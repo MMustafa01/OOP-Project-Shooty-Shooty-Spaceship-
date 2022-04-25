@@ -1,7 +1,10 @@
+#pragma once
 #include <SDL.h>
 #include "spaceship.hpp"
 #include "bullet.hpp"
 #include "enemy1.hpp"
+#include "BasicEnemy1.hpp"
+// #include "BasicEnemy2.hpp"
 #include <vector>
 #include <list>
 using namespace std;

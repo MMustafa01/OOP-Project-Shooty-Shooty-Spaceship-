@@ -148,9 +148,16 @@ void Frame::createObject(int x, int y)
 
 void Frame::createObject()
 {
-    enemy1.push_back(new Enemy());
+    int rand_enemy = rand() % 2;
+    cout << "the rand_enemy == : " << rand_enemy << endl;
+    if (rand_enemy == 0)
+        enemy1.push_back(new BasicEnemy1());
+    // else if (rand_enemy == 1 )
+    //     {
+    //         enemy1.push_back(new BasicEnemy2());
+    //         cout << " \n This is the new basic enemy can you see it??? \n";
+    //     }
 }
-
 void Frame::shootytime()
 {
     if (has_the_spaceship_spawned)
