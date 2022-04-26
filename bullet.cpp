@@ -47,7 +47,7 @@ Bullet::Bullet(){
     srcRect = srcRect12;
 
     // it will display Bullet on x = 30, y = 40 location, the size of Bullet is 50 width, 60 height
-    moverRect = {400, 500, 50, 50};
+    moverRect = {400, 500, 20, 20};
 }
 
 Bullet::Bullet(int x, int y, int z) : srcRect(srcRect12),moverRect({x+15, y, 20, 20}),direction(z) {};// constructor of Bullet with coordinates of location clicked

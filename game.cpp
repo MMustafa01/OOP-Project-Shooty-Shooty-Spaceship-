@@ -8,8 +8,14 @@ SDL_Renderer *Drawing::gRenderer = NULL;
 // SDL_Renderer *Drawing::gRenderer_gos = NULL; // gameoverscreen
 SDL_Texture *Drawing::assets = NULL;
 SDL_Texture *Drawing::assets_enemy1 = NULL;
+SDL_Texture *Drawing::assets_enemy2 = NULL;
+SDL_Texture *Drawing::assets_coin = NULL;
+SDL_Texture *Drawing::assets_enemy4 = NULL;
+
 // SDL_Texture *Drawing::game_over_screen = NULL;
-int screen = 1;
+int screen = 0; // initial screen
+int map = 0;
+int fighter = 0;
 
 bool Game::init()
 {
@@ -74,8 +80,11 @@ bool Game::loadMedia()
 	// first laod in drawing.hpp then here
 	Drawing::assets = loadTexture("assets_project.png");
 	Drawing::assets_enemy1 = loadTexture("ship.png");
+	Drawing::assets_enemy2 = loadTexture("ufo_game_enemy.png");
+	Drawing::assets_coin = loadTexture("CoinSprite.png");
+	Drawing::assets_enemy4 = loadTexture("angry_rocket_enemy.png");
 
-	gTexture = loadTexture("lava_screen.png"); // The background is loaded here
+	gTexture = loadTexture("lava bg.png"); // The background is loaded here
 	// gTexture = loadTexture("initial screen.png");
 	if (Drawing::assets == NULL || gTexture == NULL)
 	{
@@ -94,6 +103,15 @@ void Game::close()
 	SDL_DestroyTexture(Drawing::assets_enemy1);
 	Drawing::assets_enemy1 = NULL;
 
+	SDL_DestroyTexture(Drawing::assets_enemy2);
+	Drawing::assets_enemy2 = NULL;
+
+	SDL_DestroyTexture(Drawing::assets_coin);
+	Drawing::assets_coin = NULL;
+
+	SDL_DestroyTexture(Drawing::assets_enemy4);
+	Drawing::assets_enemy4 = NULL;
+
 	SDL_DestroyTexture(gTexture);
 
 	// Destroy window
@@ -108,7 +126,7 @@ void Game::close()
 
 SDL_Texture *Game::loadTexture(std::string path)
 {
-	// The final texture
+	// The final texture0
 	SDL_Texture *newTexture = NULL;
 
 	// Load image at specified path
@@ -143,7 +161,7 @@ void Game::run()
 	unsigned int last_time = SDL_GetTicks(), current_time;
 
 	unsigned int last_time_for_enemy1 = SDL_GetTicks(), current_time_for_enemy1; // same thing we did for bullets but this time we do for enemies
-
+	unsigned int last_time_for_coin1 = SDL_GetTicks(), current_time_for_coin1;
 	while (!quit)
 	{
 		// sample coed, does not work as expected
@@ -158,10 +176,9 @@ void Game::run()
 		if(keystate[SDLK_DOWN]){}*/
 
 		// Handle events on queue
-		while (SDL_PollEvent(&e) != 0)
-		{
+		
 
-			if (screen == 1)
+			if (screen == 0)
 			{
 				if (e.type == SDL_QUIT)
 				{
@@ -173,18 +190,73 @@ void Game::run()
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse, &yMouse);
 					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
-					if (370 <= xMouse <= 627 and 371 <= yMouse <= 422)
+					if (370 <= xMouse and xMouse <= 627 and 371 <= yMouse and yMouse <= 422)
 					{
-						screen = 2;
-						gTexture = loadTexture("lava_screen.png");
+
+						gTexture = loadTexture("choose screen.png");
+						screen = 1;
+					}
+				}
+			}
+		if (screen == 10)
+			{
+				
+				current_time_for_enemy1 = SDL_GetTicks();
+				if (current_time_for_enemy1 > last_time_for_enemy1 + 5000 / pow(2, current_time_for_enemy1 / 100000) + 100) // change this to a varible
+				{
+					Frame.createObject();
+					last_time_for_enemy1 = current_time_for_enemy1;
+				}
+				current_time_for_coin1 = SDL_GetTicks();
+				if (current_time_for_coin1 > last_time_for_coin1 + 10000 / pow (2,current_time_for_coin1 / 200000)) // change this to a varible
+				{
+					Frame.createCoin();
+					last_time_for_coin1 = current_time_for_coin1;
+				}
+			}	
+
+		while (SDL_PollEvent(&e) != 0)
+		{
+			if (screen == 1)
+			{
+				if (e.type == SDL_QUIT)
+				{
+					quit = true;
+				}
+
+				if (e.type == SDL_MOUSEBUTTONDOWN)
+				{
+					int xMouse, yMouse;
+					SDL_GetMouseState(&xMouse, &yMouse);
+					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
+					if (88 <= xMouse and xMouse <= 333 and 130 <= yMouse and yMouse <= 279) // for lava map
+					{
+						map = 1;
+						gTexture = loadTexture("icy bg.png");
+						screen = 10;
+					}
+
+					if (374 <= xMouse and xMouse <= 625 and 126 <= yMouse and yMouse <= 276) // for space map
+					{
+						map = 2;
+						gTexture = loadTexture("game over screen.png");
+						screen = 10;
+					}
+
+					if (670 <= xMouse and xMouse <= 926 and 126 <= yMouse and yMouse <= 276) // for ice map
+					{
+						map = 3;
+						gTexture = loadTexture("game over screen.png");
+						screen = 10;
 					}
 				}
 			}
 
 			if (Frame.the_actual_spaceship.is_dead())
 			{
-				screen = 0;
+				screen = 6;
 				gTexture = loadTexture("game over screen.png");
+				cout<<Frame.the_actual_spaceship.getCoinsCollected();
 				if (e.type == SDL_QUIT)
 				{
 					quit = true;
@@ -194,16 +266,19 @@ void Game::run()
 					int xMouse, yMouse;
 					SDL_GetMouseState(&xMouse, &yMouse);
 					std::cout << "Mouse clicked at: " << xMouse << " -- " << yMouse << std::endl;
-					if (298 <= xMouse <= 702 and 428 <= yMouse <= 473)
+					if (298 <= xMouse and xMouse <= 702 and 428 <= yMouse and yMouse <= 473)
 					{
 						cout << "working" << endl;
 
 						// the_actual_spaceship.changehealth(4);
-
+						// health = 4;
+						// Frame.resets_health();
+						Frame.reset();
+						// Frame.resets_health(the_actual_spaceship &);
 						// this part isnt working cuz idhar aa kar screen stops cuz the spaceship is dead wali condition is still tru
 						// so what w need to do is reset th health to 4 BUT i legit cant figure that part out
 
-						screen = 1;
+						screen = 0;
 					}
 				}
 			}
@@ -213,15 +288,15 @@ void Game::run()
 			// cout << count << "\n";
 
 			// for the enemy1 class to stop it from being a continuous line
-			if (screen == 2)
+			if (screen == 10)
 			{
 
-				current_time_for_enemy1 = SDL_GetTicks();
-				if (current_time_for_enemy1 > last_time_for_enemy1 + 5000 / pow(2, current_time_for_enemy1 / 100000) + 100) // change this to a varible
-				{
-					Frame.createObject();
-					last_time_for_enemy1 = current_time_for_enemy1;
-				}
+				// current_time_for_enemy1 = SDL_GetTicks();
+				// if (current_time_for_enemy1 > last_time_for_enemy1 + 5000 / pow(2, current_time_for_enemy1 / 100000) + 100) // change this to a varible
+				// {
+				// 	Frame.createObject();
+				// 	last_time_for_enemy1 = current_time_for_enemy1;
+				// }
 
 				// User requests quit
 				if (e.type == SDL_QUIT)
@@ -266,7 +341,7 @@ void Game::run()
 		SDL_RenderClear(Drawing::gRenderer);					  // removes everything from renderer
 		SDL_RenderCopy(Drawing::gRenderer, gTexture, NULL, NULL); // Draws background to renderer
 																  //********draw the objects here*******
-		if (screen == 2)
+		if (screen == 10)
 		{
 			Frame.drawObjects(movement); // movement variable denotes the movement of the spaceship. It becomes zero in every loop, and becomes 8 or -8 if the arrow keys are pressed
 		}

@@ -7,7 +7,7 @@ public:
     int frame = 0;
     SDL_RendererFlip flip = SDL_FLIP_NONE;
     int health = 4;
-
+    int coins_collected = 0;
 public:
     // add the fly function here as well.
     void draw();
@@ -21,5 +21,8 @@ public:
     int getLocation_x();
     int getLocation_y();
     int direction_spaceship();
-    // void changehealth(int h);
+    void reset_health();
+    int getCoinsCollected();
+    void increment_coins_collected();
+    void reset_coins();
 };

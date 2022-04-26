@@ -11,4 +11,8 @@ public:
     // global reference to png image sheets
     static SDL_Texture *assets;        // spaceship
     static SDL_Texture *assets_enemy1; // enenmy
+    static SDL_Texture *assets_enemy2; // enemy 2 basic
+    static SDL_Texture *assets_enemy3; //Dragon
+    static SDL_Texture *assets_enemy4; // the speedy rocket
+    static SDL_Texture *assets_coin; // coins
 };
